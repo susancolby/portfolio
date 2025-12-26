@@ -44,16 +44,22 @@ function gameLoop() {
 
   if (leftPressed) {
     player1.speed += 0.2;
-  } else {
-    player1.speed = 0;
   }
 
   if (rightPressed) {
     player2.speed += 0.2;
-  } else {
-    player2.speed = 0;
   }
 
+  if (!leftPressed) {
+    player1.speed *= 0.9;
+    if (player1.speed < 0.1) player1.speed = 0;
+  }
+  
+  if (!rightPressed) {
+    player2.speed *= 0.9;
+    if (player2.speed < 0.1) player2.speed = 0;
+  }
+  
   player1.x += player1.speed;
   player2.x += player2.speed;
   
