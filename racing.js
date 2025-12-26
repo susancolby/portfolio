@@ -22,7 +22,41 @@ const player2 = {
   speed: 0
 };
 
+let leftPressed = false;
+let rightPressed = false;
+
+canvas.addEventListener("touchstart", function(e) {
+  for (let touch of e.touches) {
+    if (touch.clientX < canvas.width / 2) {
+      leftPressed = true;
+    } else {
+      rightPressed = true;
+    }
+  }
+});
+
+canvas.addEventListener("touchend", function(e) {
+  leftPressed = false;
+  rightPressed = false;
+});
+
 function gameLoop() {
+
+  if (leftPressed) {
+    player1.speed += 0.2;
+  } else {
+    player1.speed = 0;
+  }
+
+  if (rightPressed) {
+    player2.speed += 0.2;
+  } else {
+    player2.speed = 0;
+  }
+
+  player1.x += player1.speed;
+  player2.x += player2.speed;
+  
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   
   ctx.fillStyle = player1.color;
