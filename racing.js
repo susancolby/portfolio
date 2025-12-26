@@ -4,6 +4,12 @@ const ctx = canvas.getContext("2d");
 canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
 
-ctx.fillStyle = "black";
-ctx.font = "30px Arial";
-ctx.fillText("Canvas works", 50, 50);
+function gameLoop() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  ctx.fillStyle = "black";
+  ctx.font = "30px Arial";
+  ctx.fillText("Game running...", 50, 50);
+  requestAnimationFrame(gameLoop);
+}
+
+gameLoop();
