@@ -1,4 +1,4 @@
-const canvas = document.getElementById("racing");
+const canvas = document.getElementById("race-canvas");
 const ctx = canvas.getContext("2d");
 
 canvas.width = window.innerWidth;
