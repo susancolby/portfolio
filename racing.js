@@ -5,4 +5,5 @@ canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
 
 ctx.fillStyle = "black";
-ctx.font = "30px Arial"
+ctx.font = "30px Arial";
+ctx.fillText("Canvas works", 50, 50);
