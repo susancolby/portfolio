@@ -49,6 +49,10 @@ canvas.addEventListener("touchend", function(e) {
 
 function gameLoop() {
 
+  ctx.fillStyle = "black";
+  ctx.font = "20px Arial";
+  ctx.fillText("Loop running", 20, 30);
+
   if (leftPressed) {
     player1.speed += 0.2;
   }
