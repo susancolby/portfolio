@@ -38,6 +38,13 @@ canvas.addEventListener("touchstart", function(e) {
 canvas.addEventListener("touchend", function(e) {
   leftPressed = false;
   rightPressed = false;
+
+  for (let touch of e.touches) {
+    if (touch.clientX < canvas.width / 2) {
+      leftPressed = true;
+    } else {
+      rightPressed = true;
+    }
 });
 
 function gameLoop() {
