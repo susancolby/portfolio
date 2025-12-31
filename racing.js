@@ -104,8 +104,6 @@ function gameLoop() {
   player1.x += player1.speed;
   player2.x += player2.speed;
   
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
-  
   ctx.fillStyle = player1.color;
   ctx.fillRect(player1.x, player1.y, player1.width, player1.height);
 
