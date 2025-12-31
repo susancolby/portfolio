@@ -6,7 +6,7 @@ canvas.height = window.innerHeight;
 
 const player1 = {
   x: 100,
-  y: canvas.height / 2-50,
+  y: (canvas.height / 2) - 50,
   width: 50,
   height: 30,
   color: "red",
@@ -15,7 +15,7 @@ const player1 = {
 
 const player2 = {
   x: 100,
-  y: canvas.height / 2 +50,
+  y: (canvas.height / 2) + 50,
   width: 50,
   height: 30,
   color: "blue",
