@@ -27,6 +27,24 @@ function drawTrackImage() {
   ctx.drawImage(trackImage, 0, 0, canvas.width, canvas.height);
 }
 
+const trackPath = [
+  { x: 200, y: canvas.height - 150},
+  { x: 300, y: 300 },
+  { x: 500, y: 200 },
+  { x: 700, y: 300 },
+  { x: 800, y: canvas.height - 150 },
+  { x: 200, y: canvas.height - 150 }
+];
+
+function drawTrackPathDebug() {
+  ctx.fillStyle = "yellow";
+  for (let point of trackPoint) {
+    ctx.beginPath();
+    ctx.arc(point.x, point.y, 5, 0, Math.PI * 2);
+    ctx.fill();
+  }
+}
+
 const player1 = {
   x: 100,
   y: (canvas.height / 2) - 50,
@@ -72,10 +90,10 @@ canvas.addEventListener("touchend", function(e) {
 });
 
 function gameLoop() {
-
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   
   drawTrackImage();
+  drawTrackPathDebug();
   
   if (leftPressed) {
     player1.speed += 0.2;
