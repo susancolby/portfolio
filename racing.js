@@ -1,37 +1,30 @@
 const canvas = document.getElementById("race-canvas");
 const ctx = canvas.getContext("2d");
 
-canvas.width = window.innerWidth;
-canvas.height = window.innerHeight;
+function resizeCanvas() {
+  const screenWidth = window.innerWidth;
+  const screenHeight = window.innerHeight;
 
-function drawCloudTrack() {
-  ctx.strokeStyle = "#555"; // track color
-  ctx.lineWidth = 24;       // track width
-  ctx.lineCap = "round";    // smooth line ends
-  ctx.lineJoin = "round";   // smooth corners
+  const trackRatio = 16 / 9;
 
-  ctx.beginPath();
+  if (screenWidth / screenHeight > trackRatio) {
+    canvas.height = screenHeight;
+    canvas.width = screenHeight * trackRatio;
+  } else {
+    canvas.width = screenWidth;
+    canvas.height = screenWidth / trackRatio;
+  }
+}
 
-  // Start at bottom-left
-  ctx.moveTo(100, canvas.height - 100);
+resizeCanvas();
 
-  // Left side curve up to first small top bump
-  ctx.bezierCurveTo(100, canvas.height / 2 + 50, 150, 100, 250, 100);
+window.addEventListener("resize", resizeCanvas);
 
-  // Small left top bump flowing to center top bump
-  ctx.bezierCurveTo(300, 50, 400, 50, 500, 100);
+const trackImage = new Image();
+teackImage.src = "track.png";
 
-  // Center top large bump flowing to right top bump
-  ctx.bezierCurveTo(600, 150, 700, 150, 750, 100);
-
-  // Small right top bump flowing down right side
-  ctx.bezierCurveTo(850, 50, 900, canvas.height / 2 + 50, 900, canvas.height - 100);
-
-  // Flat bottom back to start
-  ctx.lineTo(100, canvas.height - 100);
-
-  ctx.closePath();
-  ctx.stroke();
+function drawTrackImage() {
+  ctx.drawImage(trackImage, 0, 0, canvas.width, canvas.height);
 }
 
 const player1 = {
@@ -81,7 +74,8 @@ canvas.addEventListener("touchend", function(e) {
 function gameLoop() {
 
   ctx.clearRect(0, 0, canvas.width, canvas.height);
-  drawCloudTrack();
+  
+  drawTrackImage();
   
   if (leftPressed) {
     player1.speed += 0.2;
@@ -113,4 +107,4 @@ function gameLoop() {
   requestAnimationFrame(gameLoop);
 };
 
-gameLoop();
+trackImage.onload = gameLoop;
