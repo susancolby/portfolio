@@ -21,7 +21,7 @@ resizeCanvas();
 window.addEventListener("resize", resizeCanvas);
 
 const trackImage = new Image();
-teackImage.src = "track.png";
+trackImage.src = "track.png";
 
 function drawTrackImage() {
   ctx.drawImage(trackImage, 0, 0, canvas.width, canvas.height);
