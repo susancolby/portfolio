@@ -38,7 +38,7 @@ const trackPath = [
 
 function drawTrackPathDebug() {
   ctx.fillStyle = "yellow";
-  for (let point of trackPoint) {
+  for (let point of trackPath) {
     ctx.beginPath();
     ctx.arc(point.x, point.y, 5, 0, Math.PI * 2);
     ctx.fill();
