@@ -125,4 +125,4 @@ function gameLoop() {
   requestAnimationFrame(gameLoop);
 };
 
-trackImage.onload = gameLoop;
+gameLoop();
