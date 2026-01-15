@@ -1,6 +1,14 @@
 const canvas = document.getElementById("race-canvas");
 const ctx = canvas.getContext("2d");
 
+canvas.addEventListener("click", (e) => {
+  const rect = canvas.getBoundingClientRect();
+  const x = e.clientX - rect.left;
+  const y = e.clientY - rect.top;
+
+  console.log(`{ x: ${Math.round(x)}, y: ${Math.round(y)} },`);
+});
+
 function resizeCanvas() {
   const screenWidth = window.innerWidth;
   const screenHeight = window.innerHeight;
