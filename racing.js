@@ -99,7 +99,7 @@ const trackPath = [
 ];
 
 function drawTrackPathDebug() {
-  ctx.fillStyle = "yellow";
+  ctx.fillStyle = "magenta";
   for (let point of trackPath) {
     ctx.beginPath();
     ctx.arc(point.x, point.y, 5, 0, Math.PI * 2);
