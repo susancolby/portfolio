@@ -1,6 +1,11 @@
 const canvas = document.getElementById("race-canvas");
 const ctx = canvas.getContext("2d");
 
+let scale = 1;
+let offsetX = 0;
+let offsetY = 0;
+
+
 canvas.addEventListener("click", (e) => {
   const rect = canvas.getBoundingClientRect();
   const x = e.clientX - rect.left;
@@ -10,29 +15,38 @@ canvas.addEventListener("click", (e) => {
 });
 
 function resizeCanvas() {
-  const screenWidth = window.innerWidth;
-  const screenHeight = window.innerHeight;
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
 
-  const trackRatio = 16 / 9;
+  scale = Math.min(
+    canvas.width / trackImg.width,
+    canvas.height / trackImg.height
+  );
 
-  if (screenWidth / screenHeight > trackRatio) {
-    canvas.height = screenHeight;
-    canvas.width = screenHeight * trackRatio;
-  } else {
-    canvas.width = screenWidth;
-    canvas.height = screenWidth / trackRatio;
-  }
+  offsetX = (canvas.width - trackImg.width * scale) / 2;
+  offsetY = (canvas.height - trackImg.height * scale) / 2;
 }
 
-resizeCanvas();
+function scalePoint(p) {
+  return {
+    x: p.x * scale + offsetX,
+    y: p.y * scale + offsetY
+  };
+}
 
 window.addEventListener("resize", resizeCanvas);
 
-const trackImage = new Image();
-trackImage.src = "track.png";
+const trackImg = new Image();
+trackImg.src = "track.png";
 
-function drawTrackImage() {
-  ctx.drawImage(trackImage, 0, 0, canvas.width, canvas.height);
+function drawTrackImg() {
+  ctx.drawImage(
+  trackImg,
+  offsetX,
+  offsetY,
+  trackImg.width * scale,
+  trackImg.height * scale
+);
 }
 
 const trackPath = [
@@ -107,13 +121,11 @@ function getPointOnPath(index, t) {
   };
 }
 
-
-function drawTrackPathDebug() {
+function drawTrackPath() {
   ctx.fillStyle = "magenta";
-  for (let point of trackPath) {
-    ctx.beginPath();
-    ctx.arc(point.x, point.y, 5, 0, Math.PI * 2);
-    ctx.fill();
+  for (const p of trackPath) {
+    const sp = scalePoint(p);
+    ctx.fillRect(sp.x - 2, sp.y - 2, 4, 4);
   }
 }
 
@@ -165,11 +177,11 @@ canvas.addEventListener("touchend", function(e) {
 function gameLoop() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   
-  drawTrackImage();
-  drawTrackPathDebug();
+  drawTrackImg();
+  drawTrackPath();
   
   if (leftPressed) {
-    player1.speed += 0.2;
+    player1.speed += 0.002;
   }
 
   if (rightPressed) {
@@ -198,7 +210,8 @@ if (player1.pathT >= 1) {
   }
 }
 
-const pos = getPointOnPath(player1.pathIndex, player1.pathT);
+const rawPos = getPointOnPath(player1.pathIndex, player1.pathT);
+const pos = scalePoint(rawPos);
 
   player2.x += player2.speed;
   
@@ -216,4 +229,7 @@ const pos = getPointOnPath(player1.pathIndex, player1.pathT);
   requestAnimationFrame(gameLoop);
 };
 
-gameLoop();
+trackImg.onload = () => {
+  resizeCanvas();
+  gameLoop();
+};
