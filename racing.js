@@ -8,10 +8,16 @@ let offsetY = 0;
 
 canvas.addEventListener("click", (e) => {
   const rect = canvas.getBoundingClientRect();
-  const x = e.clientX - rect.left;
-  const y = e.clientY - rect.top;
 
-  console.log(`{ x: ${Math.round(x)}, y: ${Math.round(y)} },`);
+  // Canvas coordinates
+  const cx = e.clientX - rect.left;
+  const cy = e.clientY - rect.top;
+
+  // Convert back into IMAGE coordinates
+  const imgX = (cx - offsetX) / scale;
+  const imgY = (cy - offsetY) / scale;
+
+  console.log(`{ x: ${Math.round(imgX)}, y: ${Math.round(imgY)} },`);
 });
 
 function resizeCanvas() {
