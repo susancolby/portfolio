@@ -38,7 +38,6 @@ function drawTrackImage() {
 const trackPath = [
   { x: 1320, y: 218 },
   { x: 1264, y: 273 },
-  { x: 43, y: 387 },
   { x: 1333, y: 515 },
   { x: 304, y: 523 },
   { x: 871, y: 535 },
@@ -98,6 +97,17 @@ const trackPath = [
   { x: 241, y: 522 }
 ];
 
+function getPointOnPath(index, t) {
+  const p1 = trackPath[index];
+  const p2 = trackPath[index + 1];
+
+  return {
+    x: p1.x + (p2.x - p1.x) * t,
+    y: p1.y + (p2.y - p1.y) * t
+  };
+}
+
+
 function drawTrackPathDebug() {
   ctx.fillStyle = "magenta";
   for (let point of trackPath) {
@@ -108,13 +118,14 @@ function drawTrackPathDebug() {
 }
 
 const player1 = {
-  x: 100,
-  y: (canvas.height / 2) - 50,
+  pathIndex: 0,      // which point on the path
+  pathT: 0,          // how far to the next point (0 → 1)
+  speed: 0.002,      // path speed (small number!)
   width: 50,
   height: 30,
-  color: "red",
-  speed: 0
+  color: "red"
 };
+
 
 const player2 = {
   x: 100,
@@ -175,11 +186,29 @@ function gameLoop() {
     if (player2.speed < 0.1) player2.speed = 0;
   }
   
-  player1.x += player1.speed;
+  player1.pathT += player1.speed;
+
+if (player1.pathT >= 1) {
+  player1.pathT = 0;
+  player1.pathIndex++;
+
+  // Loop the track
+  if (player1.pathIndex >= trackPath.length - 1) {
+    player1.pathIndex = 0;
+  }
+}
+
+const pos = getPointOnPath(player1.pathIndex, player1.pathT);
+
   player2.x += player2.speed;
   
   ctx.fillStyle = player1.color;
-  ctx.fillRect(player1.x, player1.y, player1.width, player1.height);
+  ctx.fillRect(
+  pos.x - player1.width / 2,
+  pos.y - player1.height / 2,
+  player1.width,
+  player1.height
+  );
 
   ctx.fillStyle = player2.color;
   ctx.fillRect(player2.x, player2.y, player2.width, player2.height);
