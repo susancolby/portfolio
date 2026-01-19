@@ -24,6 +24,8 @@ function resizeCanvas() {
   canvas.width = window.innerWidth;
   canvas.height = window.innerHeight;
 
+  if (!trackImg.complete || trackImg.width === 0) return;
+
   scale = Math.min(
     canvas.width / trackImg.width,
     canvas.height / trackImg.height
@@ -32,6 +34,7 @@ function resizeCanvas() {
   offsetX = (canvas.width - trackImg.width * scale) / 2;
   offsetY = (canvas.height - trackImg.height * scale) / 2;
 }
+
 
 function scalePoint(p) {
   return {
@@ -244,16 +247,6 @@ function gameLoop() {
   
   player1.pathT += player1.speed;
 
-if (player1.pathT >= 1) {
-  player1.pathT = 0;
-  player1.pathIndex++;
-
-  // Loop the track
-  if (player1.pathIndex >= trackPath.length - 1) {
-    player1.pathIndex = 0;
-  }
-}
-
 player1.distance += player1.speed;
 
 // Loop path
@@ -280,8 +273,9 @@ const pos = {
   y: p1.y + (p2.y - p1.y) * t
 };
 
-  const sp = scalePoint(pos);
+const sp = scalePoint(pos);
 
+ctx.fillStyle = player1.color;
 ctx.fillRect(
   sp.x - player1.width / 2,
   sp.y - player1.height / 2,
@@ -291,14 +285,6 @@ ctx.fillRect(
 
 
   player2.x += player2.speed;
-  
-  ctx.fillStyle = player1.color;
-  ctx.fillRect(
-  pos.x - player1.width / 2,
-  pos.y - player1.height / 2,
-  player1.width,
-  player1.height
-  );
 
   ctx.fillStyle = player2.color;
   ctx.fillRect(player2.x, player2.y, player2.width, player2.height);
