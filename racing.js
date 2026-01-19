@@ -145,6 +145,18 @@ const trackPath = [
   { x: 3139, y: 6549 },
 ];
 
+const segmentLengths = [];
+let totalPathLength = 0;
+
+for (let i = 0; i < trackPath.length - 1; i++) {
+  const dx = trackPath[i + 1].x - trackPath[i].x;
+  const dy = trackPath[i + 1].y - trackPath[i].y;
+  const len = Math.hypot(dx, dy);
+  segmentLengths.push(len);
+  totalPathLength += len;
+}
+
+
 function getPointOnPath(index, t) {
   const p1 = trackPath[index];
   const p2 = trackPath[index + 1];
@@ -164,14 +176,12 @@ function drawTrackPath() {
 }
 
 const player1 = {
-  pathIndex: 0,      // which point on the path
-  pathT: 0,          // how far to the next point (0 → 1)
-  speed: 0.002,      // path speed (small number!)
+  distance: 0,        // distance along entire path
+  speed: 2.5,         // pixels per frame (tweak this)
   width: 50,
   height: 30,
   color: "red"
 };
-
 
 const player2 = {
   x: 100,
@@ -244,8 +254,41 @@ if (player1.pathT >= 1) {
   }
 }
 
-const rawPos = getPointOnPath(player1.pathIndex, player1.pathT);
-const pos = scalePoint(rawPos);
+player1.distance += player1.speed;
+
+// Loop path
+if (player1.distance > totalPathLength) {
+  player1.distance -= totalPathLength;
+}
+
+// Find segment
+let d = player1.distance;
+let segmentIndex = 0;
+
+while (d > segmentLengths[segmentIndex]) {
+  d -= segmentLengths[segmentIndex];
+  segmentIndex++;
+}
+
+// Interpolate
+const p1 = trackPath[segmentIndex];
+const p2 = trackPath[segmentIndex + 1];
+const t = d / segmentLengths[segmentIndex];
+
+const pos = {
+  x: p1.x + (p2.x - p1.x) * t,
+  y: p1.y + (p2.y - p1.y) * t
+};
+
+  const sp = scalePoint(pos);
+
+ctx.fillRect(
+  sp.x - player1.width / 2,
+  sp.y - player1.height / 2,
+  player1.width,
+  player1.height
+);
+
 
   player2.x += player2.speed;
   
