@@ -245,11 +245,6 @@ function gameLoop(now) {
 
 player1.distance += player1.velocity;
 
-player1.velocity += player1.accel * dt;
-player1.velocity *= Math.pow(0.95, dt);
-player1.distance += player1.velocity * dt;
-
-
 // Loop path
 if (player1.distance > totalPathLength) {
   player1.distance -= totalPathLength;
