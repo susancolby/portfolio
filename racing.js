@@ -160,18 +160,27 @@ for (let i = 0; i < trackPath.length - 1; i++) {
 }
 
 function drawTrackPath() {
-  ctx.fillStyle = "magenta";
-  for (const p of trackPath) {
-    const sp = scalePoint(p);
-    ctx.fillRect(sp.x - 2, sp.y - 2, 4, 4);
+  ctx.strokeStyle = "magenta";
+  ctx.lineWidth = 2;
+  ctx.beginPath();
+
+  const start = scalePoint(trackPath[0]);
+  ctx.moveTo(start.x, start.y);
+
+  for (let i = 1; i < trackPath.length; i++) {
+    const sp = scalePoint(trackPath[i]);
+    ctx.lineTo(sp.x, sp.y);
   }
+
+  ctx.stroke();
 }
+
 
 const player1 = {
   distance: 0,      // distance along the full track
   velocity: 0,      // current speed along the track
-  accel: 0.02,      // how fast the car accelerates
-  maxSpeed: 6,      // optional cap (recommended)
+  accel: 0.015,      // how fast the car accelerates
+  maxSpeed: 4,      // optional cap (recommended)
   width: 50,
   height: 30,
   color: "red"
@@ -222,19 +231,15 @@ function gameLoop(now) {
   drawTrackPath();
   
   if (leftPressed) {
-  player1.velocity += player1.accel;
+  player1.velocity += player1.accel * dt;
   }
 
+  player1.velocity *= Math.pow(0.98, dt); // always applied
+  if (player1.velocity < 0.01) player1.velocity = 0;
 
   if (rightPressed) {
     player2.speed += 0.2;
   }
-
-  if (!leftPressed) {
-  player1.velocity *= 0.95; // friction
-  if (player1.velocity < 0.01) player1.velocity = 0;
-}
-
   
   if (!rightPressed) {
     player2.speed *= 0.9;
@@ -242,8 +247,6 @@ function gameLoop(now) {
   }
   
   player1.velocity = Math.min(player1.velocity, player1.maxSpeed);
-
-player1.distance += player1.velocity;
 
 // Loop path
 if (player1.distance > totalPathLength) {
