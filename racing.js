@@ -4,7 +4,7 @@ const ctx = canvas.getContext("2d");
 let scale = 1;
 let offsetX = 0;
 let offsetY = 0;
-
+let lastTime = performance.now();
 
 canvas.addEventListener("click", (e) => {
   const rect = canvas.getBoundingClientRect();
@@ -159,17 +159,6 @@ for (let i = 0; i < trackPath.length - 1; i++) {
   totalPathLength += len;
 }
 
-
-function getPointOnPath(index, t) {
-  const p1 = trackPath[index];
-  const p2 = trackPath[index + 1];
-
-  return {
-    x: p1.x + (p2.x - p1.x) * t,
-    y: p1.y + (p2.y - p1.y) * t
-  };
-}
-
 function drawTrackPath() {
   ctx.fillStyle = "magenta";
   for (const p of trackPath) {
@@ -223,7 +212,10 @@ canvas.addEventListener("touchend", function(e) {
   }
 });
 
-function gameLoop() {
+function gameLoop(now) {
+  const dt = (now - lastTime) / 16.666; // normalize to ~60fps
+  lastTime = now;
+
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   
   drawTrackImg();
@@ -253,6 +245,10 @@ function gameLoop() {
 
 player1.distance += player1.velocity;
 
+player1.velocity += player1.accel * dt;
+player1.velocity *= Math.pow(0.95, dt);
+player1.distance += player1.velocity * dt;
+
 
 // Loop path
 if (player1.distance > totalPathLength) {
@@ -263,10 +259,14 @@ if (player1.distance > totalPathLength) {
 let d = player1.distance;
 let segmentIndex = 0;
 
-while (d > segmentLengths[segmentIndex]) {
+while (
+  segmentIndex < segmentLengths.length - 1 &&
+  d > segmentLengths[segmentIndex]
+) {
   d -= segmentLengths[segmentIndex];
   segmentIndex++;
 }
+
 
 // Interpolate
 const p1 = trackPath[segmentIndex];
