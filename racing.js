@@ -297,5 +297,5 @@ ctx.fillRect(
 
 trackImg.onload = () => {
   resizeCanvas();
-  gameLoop();
+  requestAnimationFrame(gameLoop);
 };
