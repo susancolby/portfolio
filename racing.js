@@ -1,5 +1,6 @@
 const canvas = document.getElementById("race-canvas");
 const ctx = canvas.getContext("2d");
+canvas.style.touchAction = "none";
 
 let scale = 1;
 let offsetX = 0;
@@ -199,6 +200,7 @@ let leftPressed = false;
 let rightPressed = false;
 
 canvas.addEventListener("touchstart", function(e) {
+  e.preventDefault();
   for (let touch of e.touches) {
     if (touch.clientX < canvas.width / 2) {
       leftPressed = true;
@@ -206,9 +208,10 @@ canvas.addEventListener("touchstart", function(e) {
       rightPressed = true;
     }
   }
-});
+}, {passive: false});
 
 canvas.addEventListener("touchend", function(e) {
+  e.preventDefault();
   leftPressed = false;
   rightPressed = false;
 
@@ -219,7 +222,7 @@ canvas.addEventListener("touchend", function(e) {
       rightPressed = true;
     }
   }
-});
+}, {passive: false});
 
 function gameLoop(now) {
   const dt = (now - lastTime) / 16.666; // normalize to ~60fps
@@ -247,6 +250,7 @@ function gameLoop(now) {
   }
   
   player1.velocity = Math.min(player1.velocity, player1.maxSpeed);
+  player1.distance += player1.velocity * dt;
 
 // Loop path
 if (player1.distance > totalPathLength) {
