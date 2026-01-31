@@ -200,7 +200,10 @@ function gameLoop(now) {
   }
 
   player1.velocity *= Math.pow(0.98, dt);
-  if (player1.velocity < 0.01) player1.velocity = 0;
+  if (!leftPressed && player1.velocity < 0.01) {
+  player1.velocity = 0;
+}
+
 
   player1.velocity = Math.min(player1.velocity, player1.maxSpeed);
   player1.distance += player1.velocity * dt;
