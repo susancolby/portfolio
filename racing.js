@@ -252,3 +252,6 @@ trackImg.onload = () => {
   resizeCanvas();
   requestAnimationFrame(gameLoop);
 };
+
+resizeCanvas(); // <-- ADD THIS
+
