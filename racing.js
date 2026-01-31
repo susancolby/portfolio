@@ -199,30 +199,41 @@ const player2 = {
 let leftPressed = false;
 let rightPressed = false;
 
-canvas.addEventListener("touchstart", function(e) {
-  e.preventDefault();
-  for (let touch of e.touches) {
-    if (touch.clientX < canvas.width / 2) {
-      leftPressed = true;
-    } else {
-      rightPressed = true;
-    }
-  }
-}, {passive: false});
-
-canvas.addEventListener("touchend", function(e) {
+canvas.addEventListener("touchstart", (e) => {
   e.preventDefault();
   leftPressed = false;
   rightPressed = false;
 
+  const rect = canvas.getBoundingClientRect();
+
   for (let touch of e.touches) {
-    if (touch.clientX < canvas.width / 2) {
+    const x = touch.clientX - rect.left;
+
+    if (x < rect.width / 2) {
       leftPressed = true;
     } else {
       rightPressed = true;
     }
   }
-}, {passive: false});
+}, { passive: false });
+
+canvas.addEventListener("touchend", (e) => {
+  e.preventDefault();
+  leftPressed = false;
+  rightPressed = false;
+
+  const rect = canvas.getBoundingClientRect();
+
+  for (let touch of e.touches) {
+    const x = touch.clientX - rect.left;
+
+    if (x < rect.width / 2) {
+      leftPressed = true;
+    } else {
+      rightPressed = true;
+    }
+  }
+}, { passive: false });
 
 function gameLoop(now) {
   const dt = (now - lastTime) / 16.666; // normalize to ~60fps
