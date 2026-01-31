@@ -49,10 +49,9 @@ function scalePoint(p) {
 /* =========================
    TRACK IMAGE
 ========================= */
-const trackImg = new Image();
-trackImg.src = "track.png";
-
 function drawTrackImg() {
+  if (!trackImg.complete || trackImg.width === 0) return;
+
   ctx.drawImage(
     trackImg,
     offsetX,
