@@ -234,6 +234,7 @@ function gameLoop(now) {
   drawTrackPath();
   
   if (leftPressed) {
+  player1.distance += player1.speed * dt;
   player1.velocity += player1.accel * dt;
   }
 
